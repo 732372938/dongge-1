@@ -94,6 +94,7 @@ async function superFans() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
+            console.log("去助力 -> "+$.authorCode)
             await task("taskact/common/drawContent", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
@@ -235,8 +236,6 @@ function task(function_id, body, isCommon = 0) {
                         } else {
                             $.log(JSON.stringify(data))
                         }
-                    } else {
-                        $.log("京东没有返回数据")
                     }
                 }
             } catch (error) {
@@ -413,6 +412,30 @@ function getMyPing() {
                 resolve();
             }
 
+        })
+    })
+}
+
+function getAuthorCodeList(url) {
+    return new Promise(resolve => {
+        const options = {
+            url: `${url}?${new Date()}`, "timeout": 10000, headers: {
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+            }
+        };
+        $.get(options, async (err, resp, data) => {
+            try {
+                if (err) {
+                    $.log(err)
+                } else {
+                if (data) data = JSON.parse(data)
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+                data = null;
+            } finally {
+                resolve(data);
+            }
         })
     })
 }
