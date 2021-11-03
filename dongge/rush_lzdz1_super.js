@@ -8,7 +8,7 @@ const $ = new Env("11.11超店会员福利社");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
-let ownCode = [];
+let ownCode = null;
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -34,6 +34,7 @@ if ($.isNode()) {
             '99bff25ecc6c4e8d81daedc5a205aab4',
         ]
     }
+
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
@@ -107,7 +108,7 @@ async function superFans() {
                 } else {
                     $.log("已经关注过了\n")
                     await $.wait(2000);
-                    return
+                    // return
                 }
                 $.log("\n加入店铺会员");
                 if ($.openCardStatus) {
@@ -188,16 +189,16 @@ function task(function_id, body, isCommon = 0) {
                                     break;
                                 case 'wxActionCommon/getUserInfo':
                                     if (data.data.yunMidImageUrl) {
-                                        if ($.index === 1) {
-                                            ownCode['pinImg'] = data.data.yunMidImageUrl
-                                            ownCode['nickname'] = data.data.nickname
-                                        }
+                                        // if ($.index === 1) {
+                                        //     ownCode['pinImg'] = data.data.yunMidImageUrl
+                                        //     ownCode['nickname'] = data.data.nickname
+                                        // }
                                         $.pinImg = data.data.yunMidImageUrl
                                     } else {
-                                        if ($.index === 1) {
-                                            ownCode['pinImg'] = 'https://img10.360buyimg.com/imgzone/jfs/t1/7020/27/13511/6142/5c5138d8E4df2e764/5a1216a3a5043c5d.png'
-                                            ownCode['nickname'] = data.data.nickname
-                                        }
+                                        // if ($.index === 1) {
+                                        //     ownCode['pinImg'] = 'https://img10.360buyimg.com/imgzone/jfs/t1/7020/27/13511/6142/5c5138d8E4df2e764/5a1216a3a5043c5d.png'
+                                        //     ownCode['nickname'] = data.data.nickname
+                                        // }
                                         $.pinImg = 'https://img10.360buyimg.com/imgzone/jfs/t1/7020/27/13511/6142/5c5138d8E4df2e764/5a1216a3a5043c5d.png'
                                     }
                                     break;
@@ -206,8 +207,8 @@ function task(function_id, body, isCommon = 0) {
                                         $.log(`开启【${data.data.activityName}】活动`)
                                         $.log("-------------------")
                                         if ($.index === 1) {
-                                            ownCode['actorUuid'] = data.data.actorUuid
-                                            console.log("你的助力码 -> "+ownCode['actorUuid'])
+                                            ownCode = data.data.actorUuid
+                                            console.log("你的助力码 -> "+ownCode)
                                         }
                                         $.activityContent = data.data;
                                         $.actorUuid = data.data.actorUuid;
